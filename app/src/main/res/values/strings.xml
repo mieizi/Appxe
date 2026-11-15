@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Appxe</string>
+    <string name="service_description">يستخدم Appxe هذه الخدمة لإغلاق التطبيقات التي تحددها أنت فقط: يفتح صفحة معلومات كل تطبيق ويضغط «فرض الإيقاف» نيابةً عنك. لا يقرأ ولا يجمع أي بيانات.</string>
+</resources>

@@ -1,0 +1,9 @@
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
+# تُحمَّل وقت البناء عبر scripts/fetch-vendor.sh
+app/src/main/assets/vendor/
+app/src/main/assets/fonts/
