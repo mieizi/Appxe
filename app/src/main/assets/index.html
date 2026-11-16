@@ -1082,7 +1082,6 @@
                 per_hour: "س",
                 wl_empty: "لا توجد تطبيقات لعرضها",
                 svc_on: "تم تفعيل خدمة الإغلاق",
-                lang_toast: "تم تغيير اللغة إلى العربية"
             },
             en: {
                 home_title: "Active memory",
@@ -1145,7 +1144,6 @@
                 per_hour: "h",
                 wl_empty: "No apps to show",
                 svc_on: "Closing service enabled",
-                lang_toast: "Language changed to English"
             }
         };
 
@@ -1754,7 +1752,6 @@
             lang = l;
             try { localStorage.setItem('appxe.lang', l); } catch (e) {}
             applyLanguage();
-            showSubtleToast(t('lang_toast'));
         }
 
         function toggleLangMenu(e) {
