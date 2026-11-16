@@ -964,6 +964,11 @@
                 <input id="wlSearchInput" type="text" placeholder="ابحث عن تطبيق..." data-i18n-ph="search_ph"
                        class="bg-transparent border-none outline-none text-xs text-white placeholder-slate-500 w-full">
             </div>
+            <div class="flex items-center justify-end px-1.5 mb-2.5">
+                <button id="wlSelectAll" onclick="toggleWhitelistAll()" class="text-[11px] font-medium text-slate-400 hover:text-amber-400 transition-colors">
+                    تحديد الكل
+                </button>
+            </div>
             <div id="whitelistItemsList" class="space-y-2.5 overflow-y-auto no-scrollbar" style="max-height: min(52vh, 420px)">
                 <!-- يتم التوليد ديناميكياً -->
             </div>
@@ -1840,6 +1845,8 @@
                 const item = document.createElement('div');
                 item.className = 'wl-row flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06]';
                 item.dataset.name = String(app.name).toLowerCase();
+                item.dataset.id = app.id;
+                item.dataset.label = app.name;
 
                 item.innerHTML = `
                     <div class="flex items-center gap-3 min-w-0">
@@ -1872,6 +1879,42 @@
                 if (match) shown++;
             });
             document.getElementById('wlEmpty').classList.toggle('hidden', shown > 0);
+            updateWhitelistAllLabel();
+        }
+
+        function visibleWhitelistRows() {
+            return [...document.querySelectorAll('#whitelistItemsList .wl-row')].filter(r => r.style.display !== 'none');
+        }
+
+        // نص الزر: «تحديد الكل» أو «إلغاء التحديد» حسب الصفوف الظاهرة
+        function updateWhitelistAllLabel() {
+            const rows = visibleWhitelistRows();
+            const btn = document.getElementById('wlSelectAll');
+            const allOn = rows.length > 0 && rows.every(r => isProtected(r.dataset.id));
+            btn.textContent = allOn ? t('deselect_all') : t('select_all');
+            btn.classList.toggle('hidden', rows.length === 0);
+        }
+
+        // يحمي كل التطبيقات الظاهرة (حسب البحث)، أو يلغي حمايتها إن كانت كلها محمية
+        function toggleWhitelistAll() {
+            const rows = visibleWhitelistRows();
+            if (rows.length === 0) return;
+            const allOn = rows.every(r => isProtected(r.dataset.id));
+            rows.forEach(r => {
+                const id = r.dataset.id;
+                if (allOn) {
+                    delete whitelist[id];
+                } else {
+                    whitelist[id] = r.dataset.label;
+                    const app = activeApps.find(a => a.id === id);
+                    if (app) app.selected = false;
+                }
+                r.querySelector('.spring-switch').classList.toggle('on', !allOn);
+            });
+            saveWhitelist();
+            document.getElementById('whitelistCountBadge').textContent = Object.keys(whitelist).length;
+            updateWhitelistAllLabel();
+            renderHomeApps();
         }
 
         document.getElementById('wlSearchInput').addEventListener('input', filterWhitelist);
@@ -1888,6 +1931,7 @@
             saveWhitelist();
             if (switchEl) switchEl.classList.toggle('on', isProtected(id));
             document.getElementById('whitelistCountBadge').textContent = Object.keys(whitelist).length;
+            updateWhitelistAllLabel();
             renderHomeApps();
         }
 
