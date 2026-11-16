@@ -731,25 +731,6 @@
                 <span class="text-[11px] text-slate-500" data-i18n="an_live">تحديث مباشر</span>
             </div>
 
-            <!-- بطاقة وضع التوفير العميق (Deep Freeze Mode) -->
-            <div class="luxury-card mb-6" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
-                <div class="card-aura"></div>
-                <div class="relative z-10 flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
-                            <i data-lucide="snowflake" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-semibold text-slate-100" data-i18n="df_title">وضع التوفير العميق</h3>
-                            <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="df_sub">تقييد العمليات الخفية وتقليل حرارة المعالج</p>
-                        </div>
-                    </div>
-                    <button id="deepFreezeToggle" onclick="toggleDeepFreeze()" class="spring-switch" aria-label="وضع التوفير العميق" data-i18n-aria="df_title">
-                        <div class="spring-thumb"></div>
-                    </button>
-                </div>
-            </div>
-
             <!-- شبكة المؤشرات البيئية النظيفة -->
             <div class="space-y-3.5">
                 <!-- 1. حمل المعالج CPU -->
@@ -855,7 +836,26 @@
                     </div>
                 </div>
 
-                <!-- 2. قائمة الاستثناءات (Whitelist Apps Drawer) -->
+                <!-- 2. وضع التوفير العميق (Deep Freeze Mode) -->
+                <div class="luxury-card" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
+                    <div class="card-aura"></div>
+                    <div class="relative z-10 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                                <i data-lucide="snowflake" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-100" data-i18n="df_title">وضع التوفير العميق</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="df_sub">تقييد العمليات الخفية وتقليل حرارة المعالج</p>
+                            </div>
+                        </div>
+                        <button id="deepFreezeToggle" onclick="toggleDeepFreeze()" class="spring-switch" aria-label="وضع التوفير العميق" data-i18n-aria="df_title">
+                            <div class="spring-thumb"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. قائمة الاستثناءات (Whitelist Apps Drawer) -->
                 <div onclick="openWhitelistDrawer()" class="luxury-card" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
                     <div class="card-aura"></div>
                     <div class="relative z-10 flex items-center justify-between gap-3">
@@ -872,7 +872,7 @@
                     </div>
                 </div>
 
-                <!-- 3. المظهر: تلقائي / فاتح / داكن / أسود نقي -->
+                <!-- 4. المظهر: تلقائي / فاتح / داكن / أسود نقي -->
                 <div class="luxury-card" style="cursor: default" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
                     <div class="card-aura"></div>
                     <div class="relative z-10 flex items-center justify-between gap-3">
@@ -894,7 +894,7 @@
                     </div>
                 </div>
 
-                <!-- 4. اللغة -->
+                <!-- 5. اللغة -->
                 <div class="luxury-card" style="cursor: default" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
                     <div class="card-aura"></div>
                     <div class="relative z-10 flex items-center justify-between gap-3">
