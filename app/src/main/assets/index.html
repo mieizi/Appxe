@@ -393,6 +393,222 @@
             transform: translateY(0);
         }
 
+        /* مبدّل المظهر (ثلاث أيقونات) */
+        .seg-control {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 3px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+        .seg-btn {
+            width: 34px;
+            height: 28px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748B;
+            border: 1px solid transparent;
+            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        .seg-btn:active { transform: scale(0.92); }
+        .seg-btn.active {
+            color: #FDE68A;
+            background: rgba(245, 158, 11, 0.16);
+            border-color: rgba(245, 158, 11, 0.30);
+        }
+
+        /* زر وقائمة اللغة */
+        .lang-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 34px;
+            padding: 0 12px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #E2E8F0;
+            font-size: 12.5px;
+            font-weight: 500;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, border-color 0.3s ease;
+        }
+        .lang-pill:active { transform: scale(0.96); }
+        .lang-pill[aria-expanded="true"] { border-color: rgba(245, 158, 11, 0.40); }
+        .lang-chevron { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+        .lang-pill[aria-expanded="true"] .lang-chevron { transform: rotate(180deg); }
+
+        .lang-menu {
+            position: absolute;
+            min-width: 132px;
+            padding: 5px;
+            border-radius: 16px;
+            background: #141A26;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.85);
+            opacity: 0;
+            transform: translateY(6px) scale(0.97);
+            pointer-events: none;
+            transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 42;
+        }
+        .lang-menu.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .lang-option {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 11px;
+            border-radius: 11px;
+            color: #CBD5E1;
+            font-size: 12.5px;
+            font-weight: 500;
+        }
+        .lang-option:active { background: rgba(255, 255, 255, 0.06); }
+        .lang-option .lang-check { opacity: 0; color: #F59E0B; }
+        .lang-option.active { color: #FDE68A; }
+        .lang-option.active .lang-check { opacity: 1; }
+
+        /* الاتجاه من اليسار لليمين (English) */
+        [dir="ltr"] .spring-switch.on .spring-thumb { transform: translateX(20px); }
+        [dir="ltr"] .dir-flip { transform: scaleX(-1); }
+
+        /* =========================================================
+           الوضع الفاتح (Light Mode)
+           ========================================================= */
+        body.light {
+            --bg-obsidian: #F4F1EA;
+            --glass-surface: rgba(255, 255, 255, 0.74);
+            --glass-border: rgba(30, 41, 59, 0.09);
+            background-color: #E9E5DB;
+            background-image: radial-gradient(circle at 50% 0%, #FBF9F4 0%, #E9E5DB 75%);
+            color: #0F172A;
+        }
+
+        @media (min-width: 640px) {
+            body.light .phone-shell {
+                border: 1px solid rgba(30, 41, 59, 0.10);
+                box-shadow:
+                    0 45px 110px -30px rgba(30, 41, 59, 0.40),
+                    0 0 0 9px #FFFFFF,
+                    0 0 0 10px rgba(30, 41, 59, 0.08);
+            }
+        }
+
+        body.light .ambient-glow {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.30) 0%, rgba(245, 158, 11, 0.08) 48%, transparent 72%);
+        }
+        body.light .ambient-glow.optimal {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.26) 0%, rgba(16, 185, 129, 0.06) 48%, transparent 72%);
+        }
+
+        body.light .luxury-card {
+            box-shadow: 0 1px 2px rgba(30, 41, 59, 0.04), 0 10px 24px -14px rgba(30, 41, 59, 0.16);
+        }
+        body.light .luxury-card.selected {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0.07) 100%);
+            border-color: rgba(217, 119, 6, 0.65);
+            box-shadow: 0 10px 28px -10px rgba(217, 119, 6, 0.35), inset 0 0 18px rgba(245, 158, 11, 0.10);
+        }
+
+        body.light .ultra-thin-track { background: rgba(30, 41, 59, 0.10); }
+        body.light .ultra-thin-fill {
+            background: linear-gradient(90deg, #D97706, #F59E0B);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
+        }
+        body.light .ultra-thin-fill.optimal {
+            background: linear-gradient(90deg, #059669, #34D399);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.40);
+        }
+
+        body.light .purge-pill-rim {
+            box-shadow: 0 18px 40px -14px rgba(30, 41, 59, 0.40), 0 0 24px rgba(245, 158, 11, 0.25);
+        }
+        body.light .purge-pill-btn { background: rgba(255, 255, 255, 0.94); color: #92400E; }
+
+        body.light .bottom-nav-dock {
+            background: rgba(255, 255, 255, 0.80);
+            border-color: rgba(30, 41, 59, 0.08);
+            box-shadow: 0 20px 45px -16px rgba(30, 41, 59, 0.32);
+        }
+        body.light .nav-item { color: #64748B; }
+        body.light .nav-item:hover { color: #334155; }
+        body.light .nav-item.active {
+            color: #92400E;
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(217, 119, 6, 0.35);
+        }
+
+        body.light .spring-switch { background: rgba(30, 41, 59, 0.10); border-color: rgba(30, 41, 59, 0.12); }
+        body.light .spring-switch .spring-thumb { background: #FFFFFF; box-shadow: 0 1px 3px rgba(30, 41, 59, 0.35); }
+        body.light .spring-switch.on {
+            background: rgba(245, 158, 11, 0.30);
+            border-color: rgba(217, 119, 6, 0.70);
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+        }
+        body.light .spring-switch.on .spring-thumb { background: #D97706; box-shadow: 0 0 10px rgba(217, 119, 6, 0.6); }
+
+        body.light .drawer-backdrop { background: rgba(30, 41, 59, 0.38); }
+        body.light .bottom-drawer {
+            background: #FBFAF7;
+            border-top-color: rgba(30, 41, 59, 0.08);
+            box-shadow: 0 -20px 50px rgba(30, 41, 59, 0.20);
+        }
+
+        body.light .seg-control,
+        body.light .lang-pill { background: rgba(30, 41, 59, 0.05); border-color: rgba(30, 41, 59, 0.10); }
+        body.light .seg-btn { color: #7B8698; }
+        body.light .seg-btn.active { color: #92400E; background: rgba(245, 158, 11, 0.20); border-color: rgba(217, 119, 6, 0.40); }
+        body.light .lang-pill { color: #1E293B; }
+        body.light .lang-pill[aria-expanded="true"] { border-color: rgba(217, 119, 6, 0.50); }
+        body.light .lang-menu { background: #FFFFFF; border-color: rgba(30, 41, 59, 0.10); box-shadow: 0 18px 40px -14px rgba(30, 41, 59, 0.40); }
+        body.light .lang-option { color: #334155; }
+        body.light .lang-option:active { background: rgba(30, 41, 59, 0.06); }
+        body.light .lang-option.active { color: #92400E; }
+        body.light .lang-option .lang-check { color: #B45309; }
+
+        /* ألوان النصوص والأسطح */
+        body.light .text-white,
+        body.light .text-slate-50,
+        body.light .text-slate-100,
+        body.light .hover\:text-white:hover { color: #0F172A; }
+        body.light .text-slate-200 { color: #1E293B; }
+        body.light .text-slate-300 { color: #334155; }
+        body.light .text-slate-400 { color: #5B6779; }
+        body.light .text-slate-500 { color: #7B8698; }
+        body.light .text-amber-400,
+        body.light .hover\:text-amber-400:hover,
+        body.light .hover\:text-amber-300:hover { color: #B45309; }
+        body.light .text-amber-300,
+        body.light .text-amber-200 { color: #92400E; }
+        body.light .text-emerald-400 { color: #059669; }
+        body.light .placeholder-slate-500::placeholder { color: #94A3B8; }
+
+        body.light .bg-white\/\[0\.03\] { background-color: rgba(30, 41, 59, 0.03); }
+        body.light .bg-white\/\[0\.04\] { background-color: rgba(30, 41, 59, 0.04); }
+        body.light .bg-white\/\[0\.05\],
+        body.light .hover\:bg-white\/\[0\.05\]:hover { background-color: rgba(30, 41, 59, 0.05); }
+        body.light .bg-white\/\[0\.06\] { background-color: rgba(30, 41, 59, 0.06); }
+        body.light .bg-white\/\[0\.08\] { background-color: rgba(30, 41, 59, 0.09); }
+        body.light .bg-white\/15 { background-color: rgba(30, 41, 59, 0.18); }
+        body.light .border-white\/\[0\.06\] { border-color: rgba(30, 41, 59, 0.08); }
+        body.light .border-white\/10 { border-color: rgba(30, 41, 59, 0.12); }
+        body.light .bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.14); }
+        body.light .bg-amber-500\/15 { background-color: rgba(245, 158, 11, 0.18); }
+        body.light .border-amber-500\/20 { border-color: rgba(217, 119, 6, 0.30); }
+        body.light .border-amber-500\/40 { border-color: rgba(217, 119, 6, 0.50); }
+        body.light #subtleToast {
+            background-color: rgba(255, 255, 255, 0.97);
+            border-color: rgba(217, 119, 6, 0.40);
+            box-shadow: 0 16px 36px -14px rgba(30, 41, 59, 0.40);
+        }
+
         /* إخفاء شريط التمرير */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -413,14 +629,14 @@
             <div class="flex items-center justify-between mb-4 min-h-[36px]">
                 <div id="homeHeaderTitle" class="flex items-center gap-2">
                     <span id="ramStatusDot" class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_#F59E0B]"></span>
-                    <h1 class="text-sm font-medium text-slate-200 tracking-wide">الذاكرة النشطة</h1>
+                    <h1 class="text-sm font-medium text-slate-200 tracking-wide" data-i18n="home_title">الذاكرة النشطة</h1>
                 </div>
 
                 <!-- حقل البحث القابل للتمدد -->
-                <div id="homeSearchBox" class="hidden flex-1 ml-3">
+                <div id="homeSearchBox" class="hidden flex-1 me-3">
                     <div class="flex items-center bg-white/[0.04] border border-white/10 rounded-full px-3.5 py-1.5">
-                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 ml-2 shrink-0"></i>
-                        <input id="appSearchInput" type="text" placeholder="ابحث عن تطبيق..." 
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 me-2 shrink-0"></i>
+                        <input id="appSearchInput" type="text" placeholder="ابحث عن تطبيق..." data-i18n-ph="search_ph" 
                                class="bg-transparent border-none outline-none text-xs text-white placeholder-slate-500 w-full">
                     </div>
                 </div>
@@ -429,9 +645,9 @@
                     <button id="homeResetBtn" onclick="resetHomeApps()" 
                             class="hidden items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-medium text-slate-400 hover:text-amber-300 bg-white/[0.04] transition-all">
                         <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
-                        <span>إعادة</span>
+                        <span data-i18n="reset">إعادة</span>
                     </button>
-                    <button onclick="toggleHomeSearch()" aria-label="بحث"
+                    <button id="homeSearchToggle" onclick="toggleHomeSearch()" aria-label="بحث" data-i18n-aria="search"
                             class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.05] transition-all">
                         <i id="homeSearchIcon" data-lucide="search" class="w-4 h-4"></i>
                     </button>
@@ -471,8 +687,8 @@
                 <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-3">
                     <i data-lucide="sparkles" class="w-5 h-5"></i>
                 </div>
-                <p class="text-sm font-medium text-slate-200">الذاكرة نقية بالكامل</p>
-                <p class="text-xs text-slate-500 mt-1">تم إغلاق كافة العمليات المستهلكة في الخلفية</p>
+                <p class="text-sm font-medium text-slate-200" data-i18n="empty_title">الذاكرة نقية بالكامل</p>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="empty_sub">تم إغلاق كافة العمليات المستهلكة في الخلفية</p>
             </div>
         </section>
 
@@ -493,9 +709,9 @@
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                    <h1 class="text-sm font-medium text-slate-200 tracking-wide">مؤشرات الأداء والحرارة</h1>
+                    <h1 class="text-sm font-medium text-slate-200 tracking-wide" data-i18n="an_title">مؤشرات الأداء والحرارة</h1>
                 </div>
-                <span class="text-[11px] text-slate-500">تحديث مباشر</span>
+                <span class="text-[11px] text-slate-500" data-i18n="an_live">تحديث مباشر</span>
             </div>
 
             <!-- بطاقة وضع التوفير العميق (Deep Freeze Mode) -->
@@ -507,11 +723,11 @@
                             <i data-lucide="snowflake" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-semibold text-slate-100">وضع التوفير العميق</h3>
-                            <p class="text-[11px] text-slate-400 mt-0.5">تقييد العمليات الخفية وتقليل حرارة المعالج</p>
+                            <h3 class="text-sm font-semibold text-slate-100" data-i18n="df_title">وضع التوفير العميق</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="df_sub">تقييد العمليات الخفية وتقليل حرارة المعالج</p>
                         </div>
                     </div>
-                    <button id="deepFreezeToggle" onclick="toggleDeepFreeze()" class="spring-switch" aria-label="وضع التوفير العميق">
+                    <button id="deepFreezeToggle" onclick="toggleDeepFreeze()" class="spring-switch" aria-label="وضع التوفير العميق" data-i18n-aria="df_title">
                         <div class="spring-thumb"></div>
                     </button>
                 </div>
@@ -526,7 +742,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2.5">
                                 <i data-lucide="cpu" class="w-4 h-4 text-amber-400"></i>
-                                <span class="text-xs font-medium text-slate-300">حمل المعالج (CPU)</span>
+                                <span class="text-xs font-medium text-slate-300" data-i18n="cpu">حمل المعالج (CPU)</span>
                             </div>
                             <span id="cpuMetricText" class="text-base font-light text-white tabular-nums" dir="ltr">18%</span>
                         </div>
@@ -551,7 +767,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2.5">
                                 <i data-lucide="thermometer" class="w-4 h-4 text-amber-400"></i>
-                                <span class="text-xs font-medium text-slate-300">حرارة البطارية</span>
+                                <span class="text-xs font-medium text-slate-300" data-i18n="batt_temp">حرارة البطارية</span>
                             </div>
                             <span id="tempMetricText" class="text-base font-light text-white tabular-nums" dir="ltr">35.4°C</span>
                         </div>
@@ -559,7 +775,7 @@
                             <div id="tempBarFill" class="h-full bg-gradient-to-l from-amber-400 to-amber-600 rounded-full transition-all duration-700" style="width: 44%;"></div>
                         </div>
                         <div class="flex justify-between text-[10px] text-slate-500 mt-2">
-                            <span>مستقر</span>
+                            <span data-i18n="stable">مستقر</span>
                             <span id="tempStatusLabel" class="text-slate-400">نطاق حراري مثالي</span>
                         </div>
                     </div>
@@ -572,7 +788,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2.5">
                                 <i data-lucide="activity" class="w-4 h-4 text-amber-400"></i>
-                                <span class="text-xs font-medium text-slate-300">استنزاف الخلفية</span>
+                                <span class="text-xs font-medium text-slate-300" data-i18n="drain">استنزاف الخلفية</span>
                             </div>
                             <span id="drainMetricText" class="text-base font-light text-white tabular-nums" dir="ltr">4.2% / س</span>
                         </div>
@@ -598,9 +814,8 @@
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                    <h1 class="text-sm font-medium text-slate-200 tracking-wide">التفضيلات والتحكم</h1>
+                    <h1 class="text-sm font-medium text-slate-200 tracking-wide" data-i18n="set_title">التفضيلات والتحكم</h1>
                 </div>
-                <span class="text-[11px] text-slate-500">v2.4</span>
             </div>
 
             <div class="space-y-3">
@@ -613,11 +828,11 @@
                                 <i data-lucide="lock" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h3 class="text-[13.5px] font-medium text-slate-100">التجميد التلقائي عند قفل الشاشة</h3>
-                                <p class="text-[11px] text-slate-400 mt-0.5">إيقاف التطبيقات غير النشطة فور إطفاء الشاشة</p>
+                                <h3 class="text-[13.5px] font-medium text-slate-100" data-i18n="af_title">التجميد التلقائي عند قفل الشاشة</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="af_sub">إيقاف التطبيقات غير النشطة فور إطفاء الشاشة</p>
                             </div>
                         </div>
-                        <button id="autoFreezeToggle" onclick="toggleSettingSwitch(this, 'تم تفعيل التجميد التلقائي')" class="spring-switch on" aria-label="التجميد التلقائي">
+                        <button id="autoFreezeToggle" onclick="toggleSettingSwitch(this)" class="spring-switch on" aria-label="التجميد التلقائي" data-i18n-aria="af_aria">
                             <div class="spring-thumb"></div>
                         </button>
                     </div>
@@ -632,55 +847,79 @@
                                 <i data-lucide="shield-check" class="w-4 h-4"></i>
                             </div>
                             <div>
-                                <h3 class="text-[13.5px] font-medium text-slate-100">قائمة الاستثناءات</h3>
-                                <p class="text-[11px] text-slate-400 mt-0.5">تطبيقات محمية من الإغلاق التلقائي (<span id="whitelistCountBadge">2</span>)</p>
+                                <h3 class="text-[13.5px] font-medium text-slate-100" data-i18n="wl_title">قائمة الاستثناءات</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5"><span data-i18n="wl_sub">تطبيقات محمية من الإغلاق التلقائي</span> (<span id="whitelistCountBadge">0</span>)</p>
                             </div>
                         </div>
-                        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500"></i>
+                        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500 dir-flip"></i>
                     </div>
                 </div>
 
-                <!-- 3. الوضع الليلي الفائق (Pure OLED Black) -->
-                <div class="luxury-card" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
+                <!-- 3. المظهر: تلقائي / فاتح / داكن / أسود نقي -->
+                <div class="luxury-card" style="cursor: default" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
                     <div class="card-aura"></div>
                     <div class="relative z-10 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3.5">
+                        <div class="flex items-center gap-3.5 min-w-0">
                             <div class="w-10 h-10 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-amber-400 shrink-0">
-                                <i data-lucide="moon" class="w-4 h-4"></i>
+                                <i data-lucide="palette" class="w-4 h-4"></i>
                             </div>
-                            <div>
-                                <h3 class="text-[13.5px] font-medium text-slate-100">الوضع الليلي الفائق</h3>
-                                <p class="text-[11px] text-slate-400 mt-0.5">سواد نقي لشاشات OLED لتوفير الطاقة</p>
+                            <div class="min-w-0">
+                                <h3 class="text-[13.5px] font-medium text-slate-100" data-i18n="ap_title">المظهر</h3>
+                                <p id="appearanceSub" class="text-[11px] text-slate-400 mt-0.5 truncate">داكن</p>
                             </div>
                         </div>
-                        <button id="oledToggle" onclick="togglePureOled(this)" class="spring-switch" aria-label="الوضع الليلي الفائق">
-                            <div class="spring-thumb"></div>
+                        <div class="seg-control" role="radiogroup" aria-label="المظهر" data-i18n-aria="ap_title">
+                            <button class="seg-btn" data-appearance="system" onclick="setAppearance('system')" role="radio" aria-label="تلقائي" data-i18n-aria="ap_system"><i data-lucide="monitor" class="w-4 h-4"></i></button>
+                            <button class="seg-btn" data-appearance="light" onclick="setAppearance('light')" role="radio" aria-label="فاتح" data-i18n-aria="ap_light"><i data-lucide="sun" class="w-4 h-4"></i></button>
+                            <button class="seg-btn" data-appearance="dark" onclick="setAppearance('dark')" role="radio" aria-label="داكن" data-i18n-aria="ap_dark"><i data-lucide="moon" class="w-4 h-4"></i></button>
+                            <button class="seg-btn" data-appearance="oled" onclick="setAppearance('oled')" role="radio" aria-label="أسود نقي" data-i18n-aria="ap_oled"><i data-lucide="contrast" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. اللغة -->
+                <div class="luxury-card" style="cursor: default" onmousemove="moveCardAura(event, this)" ontouchmove="touchCardAura(event, this)" ontouchend="endTouchAura(this)">
+                    <div class="card-aura"></div>
+                    <div class="relative z-10 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div class="w-10 h-10 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-amber-400 shrink-0">
+                                <i data-lucide="languages" class="w-4 h-4"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-[13.5px] font-medium text-slate-100" data-i18n="lang_title">اللغة</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5 truncate" data-i18n="lang_sub">لغة واجهة التطبيق</p>
+                            </div>
+                        </div>
+                        <button id="langButton" onclick="toggleLangMenu(event)" class="lang-pill" aria-haspopup="listbox" aria-expanded="false">
+                            <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                            <span id="langButtonLabel">العربية</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 lang-chevron"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- تذييل بسيط وأنيق -->
+            <!-- رقم الإصدار -->
             <div class="mt-10 text-center select-none">
-                <p class="text-[11px] text-slate-500">Minimal Luxury Dark • مصمم لراحة العين وكفاءة النظام</p>
+                <p class="text-[11px] text-slate-500" dir="ltr">v2.4</p>
             </div>
         </section>
 
         <!-- =========================================================
              شريط التنقل السفلي العائم (Minimal Bottom Floating Nav)
              ========================================================= -->
-        <nav class="bottom-nav-dock" aria-label="التنقل الرئيسي">
+        <nav class="bottom-nav-dock" aria-label="التنقل الرئيسي" data-i18n-aria="nav_aria">
             <button onclick="switchScreen('home', this)" class="nav-item active">
                 <i data-lucide="home" class="w-4 h-4"></i>
-                <span>الرئيسية</span>
+                <span data-i18n="nav_home">الرئيسية</span>
             </button>
             <button onclick="switchScreen('analytics', this)" class="nav-item">
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                <span>الإحصائيات</span>
+                <span data-i18n="nav_stats">الإحصائيات</span>
             </button>
             <button onclick="switchScreen('settings', this)" class="nav-item">
                 <i data-lucide="settings" class="w-4 h-4"></i>
-                <span>الإعدادات</span>
+                <span data-i18n="nav_settings">الإعدادات</span>
             </button>
         </nav>
 
@@ -692,8 +931,8 @@
             <div class="w-10 h-1 bg-white/15 rounded-full mx-auto mb-5"></div>
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h2 class="text-sm font-semibold text-white">قائمة الاستثناءات</h2>
-                    <p class="text-[11px] text-slate-400 mt-0.5">لن يتم تجميد التطبيقات المفعّلة هنا</p>
+                    <h2 class="text-sm font-semibold text-white" data-i18n="wl_title">قائمة الاستثناءات</h2>
+                    <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="wl_drawer_sub">لن يتم تجميد التطبيقات المفعّلة هنا</p>
                 </div>
                 <button onclick="closeWhitelistDrawer()" class="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center text-slate-400 hover:text-white">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -716,8 +955,8 @@
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-semibold text-white">تفعيل خدمة الإغلاق</h2>
-                        <p class="text-[11px] text-slate-400 mt-0.5">مرة واحدة فقط</p>
+                        <h2 class="text-sm font-semibold text-white" data-i18n="perm_title">تفعيل خدمة الإغلاق</h2>
+                        <p class="text-[11px] text-slate-400 mt-0.5" data-i18n="perm_once">مرة واحدة فقط</p>
                     </div>
                 </div>
                 <button onclick="closePermissionDrawer()" class="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center text-slate-400 hover:text-white">
@@ -725,36 +964,187 @@
                 </button>
             </div>
             <p class="text-xs text-slate-300 leading-6 mb-3">
-                يحتاج Appxe إذن «إمكانية الوصول» ليضغط «فرض الإيقاف» نيابةً عنك على التطبيقات التي تحددها.
+                <span data-i18n="perm_body">يحتاج Appxe إذن «إمكانية الوصول» ليضغط «فرض الإيقاف» نيابةً عنك على التطبيقات التي تحددها.</span>
             </p>
             <div class="space-y-2 mb-5">
                 <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-[11.5px] text-slate-300 leading-6">
-                    <span class="text-amber-400 font-semibold">١.</span>
-                    افتح إمكانية الوصول ← التطبيقات المثبتة ← Appxe ← فعّل المفتاح.
+                    <span class="text-amber-400 font-semibold" data-i18n="n1">١.</span>
+                    <span data-i18n="perm_s1">افتح إمكانية الوصول ← التطبيقات المثبتة ← Appxe ← فعّل المفتاح.</span>
                 </div>
                 <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-[11.5px] text-slate-300 leading-6">
-                    <span class="text-amber-400 font-semibold">٢.</span>
-                    إذا ظهرت رسالة «إعداد مقيّد»: افتح معلومات التطبيق ← النقاط الثلاث أعلى الصفحة ← السماح بالإعدادات المقيّدة، ثم أعد الخطوة الأولى.
+                    <span class="text-amber-400 font-semibold" data-i18n="n2">٢.</span>
+                    <span data-i18n="perm_s2">إذا ظهرت رسالة «إعداد مقيّد»: افتح معلومات التطبيق ← النقاط الثلاث أعلى الصفحة ← السماح بالإعدادات المقيّدة، ثم أعد الخطوة الأولى.</span>
                 </div>
             </div>
             <div class="flex items-center gap-2.5">
                 <button onclick="goAccessibilitySettings()" class="flex-1 py-3 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-200 text-[13px] font-semibold active:scale-[0.97] transition-transform">
-                    فتح إمكانية الوصول
+                    <span data-i18n="perm_btn_acc">فتح إمكانية الوصول</span>
                 </button>
                 <button onclick="goAppInfo()" class="flex-1 py-3 rounded-full bg-white/[0.05] border border-white/10 text-slate-300 text-[13px] font-medium active:scale-[0.97] transition-transform">
-                    معلومات التطبيق
+                    <span data-i18n="perm_btn_info">معلومات التطبيق</span>
                 </button>
             </div>
+        </div>
+
+        <!-- قائمة اللغة المنسدلة -->
+        <div id="langMenu" class="lang-menu" role="listbox">
+            <button class="lang-option" data-lang="ar" onclick="setLanguage('ar')" role="option"><span>العربية</span><i data-lucide="check" class="w-3.5 h-3.5 lang-check"></i></button>
+            <button class="lang-option" data-lang="en" onclick="setLanguage('en')" role="option"><span>English</span><i data-lucide="check" class="w-3.5 h-3.5 lang-check"></i></button>
         </div>
 
         <!-- إشعار منبثق هادئ -->
         <div id="subtleToast" class="absolute top-1.5 left-1/2 -translate-x-1/2 bg-[#141A26]/95 backdrop-blur-xl border border-amber-500/30 text-slate-100 text-[11.5px] font-medium px-4 py-2 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 whitespace-nowrap flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-            <span id="subtleToastText">تم التحديث</span>
+            <span id="subtleToastText"></span>
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // 0. النصوص باللغتين
+        // ==========================================
+        const I18N = {
+            ar: {
+                home_title: "الذاكرة النشطة",
+                search_ph: "ابحث عن تطبيق...",
+                reset: "إعادة",
+                search: "بحث",
+                empty_title: "الذاكرة نقية بالكامل",
+                empty_sub: "تم إغلاق كافة العمليات المستهلكة في الخلفية",
+                an_title: "مؤشرات الأداء والحرارة",
+                an_live: "تحديث مباشر",
+                df_title: "وضع التوفير العميق",
+                df_sub: "تقييد العمليات الخفية وتقليل حرارة المعالج",
+                cpu: "حمل المعالج (CPU)",
+                batt_temp: "حرارة البطارية",
+                stable: "مستقر",
+                drain: "استنزاف الخلفية",
+                set_title: "التفضيلات والتحكم",
+                af_title: "التجميد التلقائي عند قفل الشاشة",
+                af_sub: "إيقاف التطبيقات غير النشطة فور إطفاء الشاشة",
+                af_aria: "التجميد التلقائي",
+                wl_title: "قائمة الاستثناءات",
+                wl_sub: "تطبيقات محمية من الإغلاق التلقائي",
+                nav_aria: "التنقل الرئيسي",
+                nav_home: "الرئيسية",
+                nav_stats: "الإحصائيات",
+                nav_settings: "الإعدادات",
+                wl_drawer_sub: "لن يتم تجميد التطبيقات المفعّلة هنا",
+                perm_title: "تفعيل خدمة الإغلاق",
+                perm_once: "مرة واحدة فقط",
+                perm_body: "يحتاج Appxe إذن «إمكانية الوصول» ليضغط «فرض الإيقاف» نيابةً عنك على التطبيقات التي تحددها.",
+                perm_s1: "افتح إمكانية الوصول ← التطبيقات المثبتة ← Appxe ← فعّل المفتاح.",
+                perm_s2: "إذا ظهرت رسالة «إعداد مقيّد»: افتح معلومات التطبيق ← النقاط الثلاث أعلى الصفحة ← السماح بالإعدادات المقيّدة، ثم أعد الخطوة الأولى.",
+                perm_btn_acc: "فتح إمكانية الوصول",
+                perm_btn_info: "معلومات التطبيق",
+                n1: "١.",
+                n2: "٢.",
+                ap_title: "المظهر",
+                ap_system: "تلقائي حسب الجوال",
+                ap_light: "فاتح",
+                ap_dark: "داكن",
+                ap_oled: "أسود نقي لشاشات OLED",
+                lang_title: "اللغة",
+                lang_sub: "لغة واجهة التطبيق",
+                running: "التطبيقات قيد التشغيل ({n})",
+                select_all: "تحديد الكل",
+                deselect_all: "إلغاء التحديد",
+                sub_selected: "محدد للإغلاق",
+                sub_protected: "محمي في قائمة الاستثناءات",
+                sub_active: "نشط في الخلفية",
+                toast_protected: "هذا التطبيق محمي في قائمة الاستثناءات",
+                purge_btn: "إغلاق التطبيقات ({n})",
+                closing: "جارٍ الإغلاق…",
+                close_failed: "تعذّر إغلاق التطبيقات المحددة",
+                closed_freed: "تم إغلاق {n} تطبيقات وتحرير {mb} MB",
+                closed: "تم إغلاق {n} تطبيقات",
+                temp_cooling: "تبريد نشط ومثالي",
+                temp_ideal: "نطاق حراري مثالي",
+                temp_warm: "دافئ",
+                temp_hot: "حرارة مرتفعة",
+                per_hour: "س",
+                df_on: "تم تفعيل وضع التوفير العميق ❄️",
+                df_off: "تم إيقاف وضع التوفير العميق",
+                wl_empty: "لا توجد تطبيقات لعرضها",
+                svc_on: "تم تفعيل خدمة الإغلاق",
+                lang_toast: "تم تغيير اللغة إلى العربية"
+            },
+            en: {
+                home_title: "Active memory",
+                search_ph: "Search apps...",
+                reset: "Refresh",
+                search: "Search",
+                empty_title: "Memory is fully clear",
+                empty_sub: "All background processes have been closed",
+                an_title: "Performance & temperature",
+                an_live: "Live",
+                df_title: "Deep saver mode",
+                df_sub: "Limits hidden processes and lowers CPU heat",
+                cpu: "CPU load",
+                batt_temp: "Battery temperature",
+                stable: "Stable",
+                drain: "Background drain",
+                set_title: "Preferences & control",
+                af_title: "Auto-freeze on screen lock",
+                af_sub: "Stops inactive apps as soon as the screen turns off",
+                af_aria: "Auto-freeze",
+                wl_title: "Exceptions list",
+                wl_sub: "Apps protected from closing",
+                nav_aria: "Main navigation",
+                nav_home: "Home",
+                nav_stats: "Stats",
+                nav_settings: "Settings",
+                wl_drawer_sub: "Apps switched on here will not be closed",
+                perm_title: "Enable the closing service",
+                perm_once: "One time only",
+                perm_body: "Appxe needs the Accessibility permission to press “Force stop” for you on the apps you select.",
+                perm_s1: "Open Accessibility → Installed apps → Appxe → turn the switch on.",
+                perm_s2: "If you see “Restricted setting”: open App info → the three dots at the top → Allow restricted settings, then repeat step 1.",
+                perm_btn_acc: "Open Accessibility",
+                perm_btn_info: "App info",
+                n1: "1.",
+                n2: "2.",
+                ap_title: "Appearance",
+                ap_system: "Automatic, follows the phone",
+                ap_light: "Light",
+                ap_dark: "Dark",
+                ap_oled: "Pure black for OLED",
+                lang_title: "Language",
+                lang_sub: "App interface language",
+                running: "Running apps ({n})",
+                select_all: "Select all",
+                deselect_all: "Deselect all",
+                sub_selected: "Selected to close",
+                sub_protected: "Protected in exceptions",
+                sub_active: "Active in background",
+                toast_protected: "This app is protected in the exceptions list",
+                purge_btn: "Close apps ({n})",
+                closing: "Closing…",
+                close_failed: "Could not close the selected apps",
+                closed_freed: "Closed {n} apps and freed {mb} MB",
+                closed: "Closed {n} apps",
+                temp_cooling: "Active cooling, ideal",
+                temp_ideal: "Ideal temperature range",
+                temp_warm: "Warm",
+                temp_hot: "High temperature",
+                per_hour: "h",
+                df_on: "Deep saver mode enabled ❄️",
+                df_off: "Deep saver mode disabled",
+                wl_empty: "No apps to show",
+                svc_on: "Closing service enabled",
+                lang_toast: "Language changed to English"
+            }
+        };
+
+        let lang = 'ar';
+        try { if (localStorage.getItem('appxe.lang') === 'en') lang = 'en'; } catch (e) {}
+
+        function t(key, vars) {
+            let str = (I18N[lang] && I18N[lang][key]) || I18N.ar[key] || key;
+            if (vars) for (const k in vars) str = str.replace('{' + k + '}', vars[k]);
+            return str;
+        }
+
         // ==========================================
         // 1. مصدر البيانات: الجهاز الحقيقي عبر الجسر Android
         //    (عند فتح الصفحة في متصفح عادي تُستخدم بيانات تجريبية)
@@ -887,6 +1277,7 @@
         function switchScreen(screenId, navBtn) {
             if (currentTab === screenId) return;
             currentTab = screenId;
+            closeLangMenu();
 
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             navBtn.classList.add('active');
@@ -910,7 +1301,7 @@
                 app.name.toLowerCase().includes(searchFilter.toLowerCase())
             );
 
-            countLabel.textContent = `التطبيقات قيد التشغيل (${activeApps.length})`;
+            countLabel.textContent = t('running', { n: activeApps.length });
 
             if (activeApps.length === 0) {
                 listContainer.innerHTML = '';
@@ -927,7 +1318,7 @@
 
             const selectable = filtered.filter(a => !isProtected(a.id));
             const allSelected = selectable.length > 0 && selectable.every(a => a.selected);
-            selectAllBtn.textContent = allSelected ? 'إلغاء التحديد' : 'تحديد الكل';
+            selectAllBtn.textContent = allSelected ? t('deselect_all') : t('select_all');
 
             listContainer.innerHTML = '';
 
@@ -942,7 +1333,7 @@
                 card.ontouchmove = (e) => touchCardAura(e, card);
                 card.ontouchend = () => endTouchAura(card);
 
-                const subLabel = app.selected ? 'محدد للإغلاق' : (guarded ? 'محمي في قائمة الاستثناءات' : 'نشط في الخلفية');
+                const subLabel = app.selected ? t('sub_selected') : (guarded ? t('sub_protected') : t('sub_active'));
 
                 card.innerHTML = `
                     <div class="card-aura"></div>
@@ -979,7 +1370,7 @@
             const app = activeApps.find(a => a.id === id);
             if (!app) return;
             if (isProtected(id)) {
-                showSubtleToast('هذا التطبيق محمي في قائمة الاستثناءات');
+                showSubtleToast(t('toast_protected'));
                 return;
             }
             app.selected = !app.selected;
@@ -1003,7 +1394,7 @@
             const dock = document.getElementById('purgeDock');
             const label = document.getElementById('purgeBtnLabel');
 
-            if (!isClosing) label.textContent = `إغلاق التطبيقات (${selectedCount})`;
+            if (!isClosing) label.textContent = t('purge_btn', { n: selectedCount });
 
             if (selectedCount > 0 && currentTab === 'home') {
                 dock.classList.add('visible');
@@ -1087,7 +1478,7 @@
 
             isClosing = true;
             availBeforeMb = readRam().availMb;
-            document.getElementById('purgeBtnLabel').textContent = 'جارٍ الإغلاق…';
+            document.getElementById('purgeBtnLabel').textContent = t('closing');
             // إطاران حتى تُرسم الحالة الجديدة قبل التقاط الغطاء
             requestAnimationFrame(() => requestAnimationFrame(() => {
                 try {
@@ -1117,7 +1508,7 @@
             if (closedSet.size === 0) {
                 activeApps.forEach(a => a.selected = false);
                 renderHomeApps();
-                showSubtleToast('تعذّر إغلاق التطبيقات المحددة');
+                showSubtleToast(t('close_failed'));
                 return;
             }
 
@@ -1139,8 +1530,8 @@
             resetBtn.classList.add('flex');
 
             showSubtleToast(freedMb > 0
-                ? `تم إغلاق ${closedSet.size} تطبيقات وتحرير ${freedMb} MB`
-                : `تم إغلاق ${closedSet.size} تطبيقات`);
+                ? t('closed_freed', { n: closedSet.size, mb: freedMb })
+                : t('closed', { n: closedSet.size }));
 
             setTimeout(() => {
                 activeApps = activeApps.filter(a => !closedSet.has(a.id));
@@ -1196,7 +1587,7 @@
         });
 
         // النقر خارج شريط البحث يغلقه، ما عدا نتائج البحث وأزرار العمل عليها
-        const SEARCH_KEEP_OPEN = '#homeSearchBox, button[aria-label="بحث"], #homeAppsList, #purgeDock, #selectAllAction';
+        const SEARCH_KEEP_OPEN = '#homeSearchBox, #homeSearchToggle, #homeAppsList, #purgeDock, #selectAllAction';
         document.addEventListener('click', (e) => {
             if (!isSearchExpanded) return;
             if (e.target.closest(SEARCH_KEEP_OPEN)) return;
@@ -1225,18 +1616,18 @@
                 cpuArea.setAttribute('d', 'M0,34 Q35,32 65,33 T130,31 T195,33 T260,30 L260,40 L0,40 Z');
                 tempText.textContent = '31.2°C';
                 tempFill.style.width = '24%';
-                tempLabel.textContent = 'تبريد نشط ومثالي';
-                drainText.textContent = '1.4% / س';
-                showSubtleToast('تم تفعيل وضع التوفير العميق ❄️');
+                tempLabel.textContent = t('temp_cooling');
+                drainText.textContent = `1.4% / ${t('per_hour')}`;
+                showSubtleToast(t('df_on'));
             } else {
                 cpuText.textContent = '18%';
                 cpuLine.setAttribute('d', 'M0,30 Q35,24 65,27 T130,18 T195,23 T260,15');
                 cpuArea.setAttribute('d', 'M0,30 Q35,24 65,27 T130,18 T195,23 T260,15 L260,40 L0,40 Z');
                 tempText.textContent = '35.4°C';
                 tempFill.style.width = '44%';
-                tempLabel.textContent = 'نطاق حراري مثالي';
-                drainText.textContent = '4.2% / س';
-                showSubtleToast('تم إيقاف وضع التوفير العميق');
+                tempLabel.textContent = t('temp_ideal');
+                drainText.textContent = `4.2% / ${t('per_hour')}`;
+                showSubtleToast(t('df_off'));
             }
             updateBattery();
         }
@@ -1251,31 +1642,133 @@
                 const pct = Math.max(4, Math.min(100, ((b.temp - 20) / 30) * 100));
                 document.getElementById('tempBarFill').style.width = `${pct.toFixed(0)}%`;
                 document.getElementById('tempStatusLabel').textContent =
-                    b.temp < 38 ? 'نطاق حراري مثالي' : (b.temp < 43 ? 'دافئ' : 'حرارة مرتفعة');
+                    b.temp < 38 ? t('temp_ideal') : (b.temp < 43 ? t('temp_warm') : t('temp_hot'));
             } catch (e) {}
         }
 
         // ==========================================
         // 5. منطق شاشة الإعدادات وقائمة الاستثناءات
         // ==========================================
-        function toggleSettingSwitch(btnEl, toastMsg) {
+        function toggleSettingSwitch(btnEl) {
             btnEl.classList.toggle('on');
-            showSubtleToast(toastMsg);
         }
 
-        function applyOled(isOled) {
-            document.getElementById('oledToggle').classList.toggle('on', isOled);
-            document.body.classList.toggle('pure-oled', isOled);
+        // المظهر: تلقائي / فاتح / داكن / أسود نقي
+        let appearance = 'dark';   // 'system' | 'light' | 'dark' | 'oled'
+
+        function loadAppearance() {
+            try {
+                const a = localStorage.getItem('appxe.appearance');
+                if (a === 'system' || a === 'light' || a === 'dark' || a === 'oled') appearance = a;
+                // من الإصدارات السابقة: مفتاح السواد النقي كان مستقلاً
+                else if (localStorage.getItem('appxe.oled') === '1') appearance = 'oled';
+            } catch (e) {}
+        }
+
+        function systemIsDark() {
+            if (HAS_NATIVE && Android.isSystemDark) {
+                try { return !!Android.isSystemDark(); } catch (e) {}
+            }
+            return !(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+        }
+
+        // المظهر الفعلي المعروض: light أو oled أو dark
+        function resolvedTheme() {
+            if (appearance === 'system') return systemIsDark() ? 'dark' : 'light';
+            return appearance;
+        }
+
+        function applyTheme() {
+            const mode = resolvedTheme();
+            document.body.classList.toggle('pure-oled', mode === 'oled');
+            document.body.classList.toggle('light', mode === 'light');
+            document.querySelectorAll('.seg-btn').forEach(b => {
+                const on = b.dataset.appearance === appearance;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-checked', on ? 'true' : 'false');
+            });
+            document.getElementById('appearanceSub').textContent = t('ap_' + appearance);
             // لون شريط حالة النظام يتبع خلفية التطبيق
-            if (HAS_NATIVE && Android.setStatusBarDark) Android.setStatusBarDark(isOled);
+            if (HAS_NATIVE) {
+                if (Android.setTheme) Android.setTheme(mode);
+                else if (Android.setStatusBarDark) Android.setStatusBarDark(mode === 'oled');
+            }
         }
 
-        function togglePureOled(btnEl) {
-            const isOled = !btnEl.classList.contains('on');
-            applyOled(isOled);
-            try { localStorage.setItem('appxe.oled', isOled ? '1' : '0'); } catch (e) {}
-            showSubtleToast(isOled ? 'تم تفعيل السواد النقي Pure OLED' : 'تم العودة إلى خلفية Obsidian');
+        function setAppearance(a) {
+            if (appearance === a) return;
+            appearance = a;
+            try { localStorage.setItem('appxe.appearance', a); } catch (e) {}
+            applyTheme();
         }
+
+        // يستدعيه التطبيق عند تغيّر مظهر الجوال (للاختيار «تلقائي»)
+        window.onSystemThemeChange = function () {
+            if (appearance === 'system') applyTheme();
+        };
+        if (window.matchMedia) {
+            try {
+                window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => window.onSystemThemeChange());
+            } catch (e) {}
+        }
+
+        // اللغة
+        const LANG_NAMES = { ar: 'العربية', en: 'English' };
+
+        function applyLanguage() {
+            const html = document.documentElement;
+            html.lang = lang;
+            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+            document.getElementById('langButtonLabel').textContent = LANG_NAMES[lang];
+            document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
+            document.getElementById('appearanceSub').textContent = t('ap_' + appearance);
+            document.getElementById('tempStatusLabel').textContent = isDeepFreezeOn ? t('temp_cooling') : t('temp_ideal');
+            document.getElementById('drainMetricText').textContent = `${isDeepFreezeOn ? '1.4' : '4.2'}% / ${t('per_hour')}`;
+            renderHomeApps();
+            updateBattery();
+            if (HAS_NATIVE && Android.setLanguage) Android.setLanguage(lang);
+        }
+
+        function setLanguage(l) {
+            closeLangMenu();
+            if (l === lang) return;
+            lang = l;
+            try { localStorage.setItem('appxe.lang', l); } catch (e) {}
+            applyLanguage();
+            showSubtleToast(t('lang_toast'));
+        }
+
+        function toggleLangMenu(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('langMenu');
+            if (menu.classList.contains('open')) { closeLangMenu(); return; }
+            // تُفتح القائمة فوق الزر، بمحاذاة حافته
+            const btn = document.getElementById('langButton');
+            const shell = document.querySelector('.phone-shell').getBoundingClientRect();
+            const r = btn.getBoundingClientRect();
+            menu.style.bottom = `${shell.bottom - r.top + 8}px`;
+            if (document.documentElement.dir === 'rtl') {
+                menu.style.left = `${r.left - shell.left}px`;
+                menu.style.right = 'auto';
+            } else {
+                menu.style.right = `${shell.right - r.right}px`;
+                menu.style.left = 'auto';
+            }
+            menu.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeLangMenu() {
+            document.getElementById('langMenu').classList.remove('open');
+            document.getElementById('langButton').setAttribute('aria-expanded', 'false');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#langMenu') && !e.target.closest('#langButton')) closeLangMenu();
+        });
 
         function openWhitelistDrawer() {
             renderWhitelistItems();
@@ -1300,7 +1793,7 @@
             });
 
             if (rows.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">لا توجد تطبيقات لعرضها</p>';
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">${esc(t('wl_empty'))}</p>`;
             }
 
             rows.forEach(app => {
@@ -1406,7 +1899,7 @@
             if (HAS_NATIVE && document.getElementById('permDrawer').classList.contains('open')
                 && Android.isServiceEnabled()) {
                 closePermissionDrawer();
-                showSubtleToast('تم تفعيل خدمة الإغلاق');
+                showSubtleToast(t('svc_on'));
             }
             loadApps();
             renderHomeApps();
@@ -1416,6 +1909,7 @@
 
         // زر الرجوع في الجهاز: يغلق النوافذ ثم يعود للرئيسية
         window.handleBack = function () {
+            if (document.getElementById('langMenu').classList.contains('open')) { closeLangMenu(); return true; }
             if (document.getElementById('permDrawer').classList.contains('open')) { closePermissionDrawer(); return true; }
             if (document.getElementById('whitelistDrawer').classList.contains('open')) { closeWhitelistDrawer(); return true; }
             if (isSearchExpanded) { toggleHomeSearch(); return true; }
@@ -1428,7 +1922,9 @@
 
         // التشغيل الأولي
         window.onload = () => {
-            try { applyOled(localStorage.getItem('appxe.oled') === '1'); } catch (e) {}
+            loadAppearance();
+            applyTheme();
+            applyLanguage();
             document.getElementById('whitelistCountBadge').textContent = Object.keys(whitelist).length;
             loadApps();
             renderHomeApps();

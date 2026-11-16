@@ -3,6 +3,7 @@ package com.mieizi.appxe;
 import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -62,6 +63,9 @@ public class CloserService extends AccessibilityService {
     private boolean running;
     private int state = IDLE;
     private long stepStart;
+
+    private boolean english;
+    private int coverColor = 0xFF0B0F17;
 
     private final Set<String> forceTexts = new LinkedHashSet<>();
     private final Set<String> okTexts = new LinkedHashSet<>();
@@ -124,6 +128,9 @@ public class CloserService extends AccessibilityService {
         queue = new ArrayList<>(pkgs);
         done = callback;
         index = -1;
+        SharedPreferences sp = getSharedPreferences(MainActivity.PREFS, MODE_PRIVATE);
+        english = "en".equals(sp.getString("lang", "ar"));
+        coverColor = MainActivity.backgroundFor(sp.getString("theme", "dark"));
         loadTexts();
         try {
             showOverlay(cover);
@@ -146,7 +153,7 @@ public class CloserService extends AccessibilityService {
             finish();
             return;
         }
-        setPill("جارٍ الإغلاق " + (index + 1) + " / " + queue.size());
+        setPill((english ? "Closing " : "جارٍ الإغلاق ") + (index + 1) + " / " + queue.size());
         try {
             Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.parse("package:" + queue.get(index)));
@@ -375,7 +382,7 @@ public class CloserService extends AccessibilityService {
     private void showOverlay(Bitmap cover) {
         removeOverlay();
         FrameLayout root = new FrameLayout(this);
-        root.setBackgroundColor(0xFF0B0F17);
+        root.setBackgroundColor(coverColor);
         root.setClickable(true); // يمنع اللمس أثناء الإغلاق
 
         if (cover != null) {

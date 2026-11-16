@@ -6,14 +6,18 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,6 +25,7 @@ import android.provider.Settings;
 import android.util.Base64;
 import android.view.PixelCopy;
 import android.view.View;
+import android.view.WindowInsetsController;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
@@ -44,6 +49,8 @@ import java.util.Set;
 /** الواجهة: صفحة HTML الأصلية داخل WebView، مع جسر يزوّدها بالبيانات الحقيقية. */
 public class MainActivity extends Activity {
 
+    static final String PREFS = "appxe";
+
     private WebView web;
     private final Handler main = new Handler(Looper.getMainLooper());
 
@@ -52,8 +59,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // المظهر المحفوظ يُطبَّق قبل تحميل الصفحة حتى لا تومض الخلفية بلون آخر
+        String savedTheme = getSharedPreferences(PREFS, MODE_PRIVATE).getString("theme", "dark");
+        applyBars(savedTheme);
+
         web = new WebView(this);
-        web.setBackgroundColor(0xFF0B0F17);
+        web.setBackgroundColor(backgroundFor(savedTheme));
         web.setOverScrollMode(View.OVER_SCROLL_NEVER);
         web.setVerticalScrollBarEnabled(false);
         web.setHorizontalScrollBarEnabled(false);
@@ -74,6 +85,44 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         js("window.onAppResume && window.onAppResume()");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // تغيّر وضع الجوال (داكن/فاتح): يهمّ الاختيار «تلقائي»
+        js("window.onSystemThemeChange && window.onSystemThemeChange()");
+    }
+
+    /** لون خلفية كل مظهر: light أو oled أو dark. */
+    static int backgroundFor(String mode) {
+        if ("light".equals(mode)) return 0xFFF4F1EA;
+        if ("oled".equals(mode)) return 0xFF000000;
+        return 0xFF0B0F17;
+    }
+
+    /** شريطا الحالة والتنقل بلون خلفية التطبيق، وبأيقونات داكنة في المظهر الفاتح. */
+    @SuppressWarnings("deprecation")
+    private void applyBars(String mode) {
+        int bg = backgroundFor(mode);
+        boolean light = "light".equals(mode);
+        getWindow().setStatusBarColor(bg);
+        getWindow().setNavigationBarColor(bg);
+        getWindow().setBackgroundDrawable(new ColorDrawable(bg));
+
+        View decor = getWindow().getDecorView();
+        int flags = decor.getSystemUiVisibility();
+        int lightFlags = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        decor.setSystemUiVisibility(light ? (flags | lightFlags) : (flags & ~lightFlags));
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            WindowInsetsController c = getWindow().getInsetsController();
+            if (c != null) {
+                int mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                        | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                c.setSystemBarsAppearance(light ? mask : 0, mask);
+            }
+        }
     }
 
     @Override
@@ -289,15 +338,31 @@ public class MainActivity extends Activity {
             return o.toString();
         }
 
-        /** شريط حالة النظام بلون خلفية التطبيق: أسود في وضع OLED، وإلا Obsidian. */
+        /** هل الجوال نفسه في الوضع الداكن؟ للاختيار «تلقائي». */
         @JavascriptInterface
-        public void setStatusBarDark(final boolean oled) {
+        public boolean isSystemDark() {
+            int night = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            return night == Configuration.UI_MODE_NIGHT_YES;
+        }
+
+        /** المظهر المعروض حالياً: light أو oled أو dark. */
+        @JavascriptInterface
+        public void setTheme(final String mode) {
             main.post(new Runnable() {
                 @Override
                 public void run() {
-                    getWindow().setStatusBarColor(oled ? 0xFF000000 : 0xFF0B0F17);
+                    getSharedPreferences(PREFS, MODE_PRIVATE).edit().putString("theme", mode).apply();
+                    applyBars(mode);
+                    if (web != null) web.setBackgroundColor(backgroundFor(mode));
                 }
             });
+        }
+
+        /** لغة الواجهة (ar أو en)، تستخدمها خدمة الإغلاق في نص التقدم. */
+        @JavascriptInterface
+        public void setLanguage(String lang) {
+            SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+            sp.edit().putString("lang", "en".equals(lang) ? "en" : "ar").apply();
         }
 
         @JavascriptInterface
