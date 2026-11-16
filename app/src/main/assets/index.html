@@ -1195,6 +1195,13 @@
             renderHomeApps();
         });
 
+        // النقر على أي مكان خارج شريط البحث (غير زر X) يغلق البحث
+        document.addEventListener('click', (e) => {
+            if (!isSearchExpanded) return;
+            if (e.target.closest('#homeSearchBox') || e.target.closest('button[aria-label="بحث"]')) return;
+            toggleHomeSearch();
+        }, true);
+
         // ==========================================
         // 4. منطق شاشة الإحصائيات (Deep Freeze Mode)
         // ==========================================
