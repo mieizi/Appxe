@@ -13,6 +13,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Insets;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,7 +26,11 @@ import android.provider.Settings;
 import android.util.Base64;
 import android.view.PixelCopy;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
@@ -33,6 +38,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +50,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /** الواجهة: صفحة HTML الأصلية داخل WebView، مع جسر يزوّدها بالبيانات الحقيقية. */
@@ -54,6 +61,10 @@ public class MainActivity extends Activity {
     private WebView web;
     private final Handler main = new Handler(Looper.getMainLooper());
 
+    // ارتفاع شريطي النظام بوحدة CSS، تُزاح به عناصر الصفحة
+    private volatile float insetTop;
+    private volatile float insetBottom;
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,7 @@ public class MainActivity extends Activity {
 
         // المظهر المحفوظ يُطبَّق قبل تحميل الصفحة حتى لا تومض الخلفية بلون آخر
         String savedTheme = getSharedPreferences(PREFS, MODE_PRIVATE).getString("theme", "dark");
+        edgeToEdge();
         applyBars(savedTheme);
 
         web = new WebView(this);
@@ -77,7 +89,18 @@ public class MainActivity extends Activity {
 
         web.setWebViewClient(new WebViewClient());
         web.addJavascriptInterface(new Bridge(), "Android");
-        setContentView(web);
+
+        FrameLayout root = new FrameLayout(this);
+        root.addView(web, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        root.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                onInsets(insets);
+                return insets;
+            }
+        });
+        setContentView(root);
         web.loadUrl("file:///android_asset/index.html");
     }
 
@@ -101,13 +124,75 @@ public class MainActivity extends Activity {
         return 0xFF0B0F17;
     }
 
-    /** شريطا الحالة والتنقل بلون خلفية التطبيق، وبأيقونات داكنة في المظهر الفاتح. */
+    /**
+     * الصفحة تُرسم خلف شريطي الحالة والتنقل وهما شفافان، فيظهر لونها تحتهما مباشرة.
+     * بهذا يتغير الشريطان مع الواجهة في الإطار نفسه لأنهما سطح واحد.
+     */
+    @SuppressWarnings("deprecation")
+    private void edgeToEdge() {
+        Window w = getWindow();
+        if (Build.VERSION.SDK_INT >= 28) {
+            WindowManager.LayoutParams lp = w.getAttributes();
+            lp.layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            w.setAttributes(lp);
+        }
+        if (Build.VERSION.SDK_INT >= 30) {
+            w.setDecorFitsSystemWindows(false);
+        } else {
+            View d = w.getDecorView();
+            d.setSystemUiVisibility(d.getSystemUiVisibility()
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+        w.setStatusBarColor(0x00000000);
+        w.setNavigationBarColor(0x00000000);
+        if (Build.VERSION.SDK_INT >= 29) {
+            w.setStatusBarContrastEnforced(false);
+            w.setNavigationBarContrastEnforced(false);
+        }
+    }
+
+    /** يحسب ارتفاع شريطي النظام ولوحة المفاتيح ويبلّغ الصفحة. */
+    @SuppressWarnings("deprecation")
+    private void onInsets(WindowInsets insets) {
+        int top;
+        int bottom;
+        int ime;
+        if (Build.VERSION.SDK_INT >= 30) {
+            Insets bars = insets.getInsets(
+                    WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+            top = bars.top;
+            bottom = bars.bottom;
+            ime = insets.getInsets(WindowInsets.Type.ime()).bottom;
+        } else {
+            top = insets.getSystemWindowInsetTop();
+            bottom = insets.getStableInsetBottom();
+            int sys = insets.getSystemWindowInsetBottom();
+            ime = sys > bottom ? sys : 0;
+        }
+
+        // عند ظهور لوحة المفاتيح تنكمش الصفحة فوقها كما كانت تفعل سابقاً
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) web.getLayoutParams();
+        int margin = Math.max(ime, 0);
+        if (lp.bottomMargin != margin) {
+            lp.bottomMargin = margin;
+            web.setLayoutParams(lp);
+        }
+
+        float density = getResources().getDisplayMetrics().density;
+        insetTop = top / density;
+        insetBottom = ime > 0 ? 0f : bottom / density;
+        js(String.format(Locale.US, "window.setInsets && window.setInsets(%.2f, %.2f)",
+                insetTop, insetBottom));
+    }
+
+    /** خلفية النافذة بلون المظهر، وأيقونات الشريطين داكنة في المظهر الفاتح. */
     @SuppressWarnings("deprecation")
     private void applyBars(String mode) {
         int bg = backgroundFor(mode);
         boolean light = "light".equals(mode);
-        getWindow().setStatusBarColor(bg);
-        getWindow().setNavigationBarColor(bg);
         getWindow().setBackgroundDrawable(new ColorDrawable(bg));
 
         View decor = getWindow().getDecorView();
@@ -301,6 +386,12 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public String getApps() {
             return listApps().toString();
+        }
+
+        /** ارتفاع شريطي النظام بوحدة CSS، تقرؤه الصفحة عند التحميل. */
+        @JavascriptInterface
+        public String getInsets() {
+            return String.format(Locale.US, "{\"top\":%.2f,\"bottom\":%.2f}", insetTop, insetBottom);
         }
 
         @JavascriptInterface
