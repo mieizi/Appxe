@@ -692,7 +692,7 @@
             <!-- ترويسة القائمة -->
             <div class="flex items-center justify-between px-1.5 mt-3 mb-2.5">
                 <span id="runningCountLabel" class="text-[11px] font-medium text-slate-500">التطبيقات قيد التشغيل (6)</span>
-                <button id="selectAllAction" onclick="toggleSelectAllApps()" class="text-[11px] font-medium text-slate-400 hover:text-amber-400 transition-colors">
+                <button id="selectAllAction" onclick="toggleSelectAllApps()" class="text-[11px] font-medium text-slate-400 transition-colors">
                     تحديد الكل
                 </button>
             </div>
@@ -1348,6 +1348,9 @@
             const selectable = filtered.filter(a => !isProtected(a.id));
             const allSelected = selectable.length > 0 && selectable.every(a => a.selected);
             selectAllBtn.textContent = allSelected ? t('deselect_all') : t('select_all');
+            // الزر يضيء فقط عندما يكون الكل محدداً؛ اللون مرتبط بالحالة لا باللمس
+            selectAllBtn.classList.toggle('text-amber-400', allSelected);
+            selectAllBtn.classList.toggle('text-slate-400', !allSelected);
 
             listContainer.innerHTML = '';
 
