@@ -475,6 +475,12 @@
         .lang-option.active { color: #FDE68A; }
         .lang-option.active .lang-check { opacity: 1; }
 
+        /* تبديل المظهر فوري: تتوقف كل التدرجات للحظة التبديل حتى تتغير الواجهة مع شريط النظام معاً */
+        .theme-switching,
+        .theme-switching *,
+        .theme-switching *::before,
+        .theme-switching *::after { transition: none !important; }
+
         /* الاتجاه من اليسار لليمين (English) */
         [dir="ltr"] .spring-switch.on .spring-thumb { transform: translateX(20px); }
         [dir="ltr"] .dir-flip { transform: scaleX(-1); }
@@ -1680,6 +1686,8 @@
 
         function applyTheme() {
             const mode = resolvedTheme();
+            const root = document.documentElement;
+            root.classList.add('theme-switching');
             document.body.classList.toggle('pure-oled', mode === 'oled');
             document.body.classList.toggle('light', mode === 'light');
             document.querySelectorAll('.seg-btn').forEach(b => {
@@ -1693,6 +1701,9 @@
                 if (Android.setTheme) Android.setTheme(mode);
                 else if (Android.setStatusBarDark) Android.setStatusBarDark(mode === 'oled');
             }
+            // تُرسم الألوان الجديدة أولاً ثم تعود التدرجات لبقية التفاعلات
+            void root.offsetHeight;
+            requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
         }
 
         function setAppearance(a) {
