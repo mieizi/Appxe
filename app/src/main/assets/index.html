@@ -125,7 +125,8 @@
             opacity: 0;
             transform: translateY(10px) scale(0.99);
             pointer-events: none;
-            transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+            /* الصفحة المغادرة تختفي فوراً حتى لا يبقى أثرها تحت الصفحة الجديدة */
+            transition: none;
             z-index: 10;
         }
 
@@ -133,6 +134,8 @@
             opacity: 1;
             transform: translateY(0) scale(1);
             pointer-events: auto;
+            /* الصفحة الداخلة فقط هي التي تتحرك */
+            transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         /* البطاقات الزجاجية مع إضاءة متتبعة للمؤشر واللمس */
