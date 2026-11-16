@@ -87,19 +87,6 @@
             }
         }
 
-        /* النوتش العلوي الأنيق */
-        .top-pill-notch {
-            width: 106px;
-            height: 24px;
-            background: #000000;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 0 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
         /* الهالة الضوئية المتنفسة في الخلفية */
         @keyframes breatheAura {
             0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.42; }
@@ -129,7 +116,7 @@
         .screen-view {
             position: absolute;
             inset: 0;
-            padding-top: 84px;
+            padding-top: 28px;
             padding-bottom: 104px;
             overflow-y: auto;
             opacity: 0;
@@ -417,17 +404,6 @@
         <!-- الهالة الضوئية المتنفسة -->
         <div id="ambientGlow" class="ambient-glow"></div>
 
-        <!-- الشريط العلوي الثابت -->
-        <header class="px-6 pt-4 sm:pt-5 pb-2 flex items-center justify-between z-30 relative select-none">
-            <span id="statusClock" class="text-[11px] font-medium text-slate-400 tracking-wider" dir="ltr">--:--</span>
-            <div class="top-pill-notch">
-                <span class="w-2 h-2 rounded-full bg-amber-500/80"></span>
-            </div>
-            <div class="flex items-center gap-1.5 text-slate-400">
-                <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
-                <i data-lucide="battery-charging" class="w-4 h-4 text-amber-400"></i>
-            </div>
-        </header>
 
         <!-- =========================================================
              الشاشة 1: الرئيسية (Home / System Monitor)
@@ -772,7 +748,7 @@
         </div>
 
         <!-- إشعار منبثق هادئ -->
-        <div id="subtleToast" class="absolute top-14 left-1/2 -translate-x-1/2 bg-[#141A26]/95 backdrop-blur-xl border border-amber-500/30 text-slate-100 text-[11.5px] font-medium px-4 py-2 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 whitespace-nowrap flex items-center gap-2">
+        <div id="subtleToast" class="absolute top-1.5 left-1/2 -translate-x-1/2 bg-[#141A26]/95 backdrop-blur-xl border border-amber-500/30 text-slate-100 text-[11.5px] font-medium px-4 py-2 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 whitespace-nowrap flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
             <span id="subtleToastText">تم التحديث</span>
         </div>
@@ -1282,6 +1258,8 @@
         function applyOled(isOled) {
             document.getElementById('oledToggle').classList.toggle('on', isOled);
             document.body.classList.toggle('pure-oled', isOled);
+            // لون شريط حالة النظام يتبع خلفية التطبيق
+            if (HAS_NATIVE && Android.setStatusBarDark) Android.setStatusBarDark(isOled);
         }
 
         function togglePureOled(btnEl) {
@@ -1412,19 +1390,11 @@
         }
 
         // ==========================================
-        // 7. الربط مع النظام: الساعة، العودة، زر الرجوع
+        // 7. الربط مع النظام: العودة للتطبيق وزر الرجوع
         // ==========================================
-        function updateClock() {
-            const d = new Date();
-            const hh = String(d.getHours()).padStart(2, '0');
-            const mm = String(d.getMinutes()).padStart(2, '0');
-            document.getElementById('statusClock').textContent = `${hh}:${mm}`;
-        }
-
         // عند العودة إلى التطبيق: تحديث القائمة والذاكرة
         window.onAppResume = function () {
             if (isClosing) return;
-            updateClock();
             if (HAS_NATIVE && document.getElementById('permDrawer').classList.contains('open')
                 && Android.isServiceEnabled()) {
                 closePermissionDrawer();
@@ -1452,14 +1422,12 @@
         window.onload = () => {
             try { applyOled(localStorage.getItem('appxe.oled') === '1'); } catch (e) {}
             document.getElementById('whitelistCountBadge').textContent = Object.keys(whitelist).length;
-            updateClock();
             loadApps();
             renderHomeApps();
             refreshRam(false);
             updateBattery();
             icons();
 
-            setInterval(updateClock, 15000);
             setInterval(() => { if (currentTab === 'home' && !document.hidden) refreshRam(true); }, 3000);
             setInterval(() => { if (currentTab === 'analytics' && !document.hidden) updateBattery(); }, 5000);
         };
