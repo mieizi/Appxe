@@ -964,7 +964,8 @@
                 <input id="wlSearchInput" type="text" placeholder="ابحث عن تطبيق..." data-i18n-ph="search_ph"
                        class="bg-transparent border-none outline-none text-xs text-white placeholder-slate-500 w-full">
             </div>
-            <div class="flex items-center justify-end px-1.5 mb-2.5">
+            <div class="flex items-center justify-between px-1.5 mb-2.5">
+                <span id="wlSelectedCount" class="text-[11px] font-medium text-slate-500"></span>
                 <button id="wlSelectAll" onclick="toggleWhitelistAll()" class="text-[11px] font-medium text-slate-400 hover:text-amber-400 transition-colors">
                     تحديد الكل
                 </button>
@@ -1080,6 +1081,7 @@
                 lang_sub: "لغة واجهة التطبيق",
                 running: "التطبيقات قيد التشغيل ({n})",
                 select_all: "تحديد الكل",
+                wl_selected: "المحدد ({n})",
                 deselect_all: "إلغاء التحديد",
                 sub_selected: "محدد للإغلاق",
                 sub_protected: "محمي في قائمة الاستثناءات",
@@ -1142,6 +1144,7 @@
                 lang_sub: "App interface language",
                 running: "Running apps ({n})",
                 select_all: "Select all",
+                wl_selected: "Selected ({n})",
                 deselect_all: "Deselect all",
                 sub_selected: "Selected to close",
                 sub_protected: "Protected in exceptions",
@@ -1893,6 +1896,9 @@
             const allOn = rows.length > 0 && rows.every(r => isProtected(r.dataset.id));
             btn.textContent = allOn ? t('deselect_all') : t('select_all');
             btn.classList.toggle('hidden', rows.length === 0);
+            // عدد التطبيقات المحددة: يظهر عند تحديد واحد فأكثر
+            const n = Object.keys(whitelist).length;
+            document.getElementById('wlSelectedCount').textContent = n > 0 ? t('wl_selected', { n }) : '';
         }
 
         // يحمي كل التطبيقات الظاهرة (حسب البحث)، أو يلغي حمايتها إن كانت كلها محمية
