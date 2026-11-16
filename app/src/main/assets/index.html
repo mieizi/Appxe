@@ -966,7 +966,7 @@
             </div>
             <div class="flex items-center justify-between px-1.5 mb-2.5">
                 <span id="wlSelectedCount" class="text-[11px] font-medium text-slate-500"></span>
-                <button id="wlSelectAll" onclick="toggleWhitelistAll()" class="text-[11px] font-medium text-slate-400 hover:text-amber-400 transition-colors">
+                <button id="wlSelectAll" onclick="toggleWhitelistAll()" class="text-[11px] font-medium text-slate-400 transition-colors">
                     تحديد الكل
                 </button>
             </div>
@@ -1895,6 +1895,9 @@
             const btn = document.getElementById('wlSelectAll');
             const allOn = rows.length > 0 && rows.every(r => isProtected(r.dataset.id));
             btn.textContent = allOn ? t('deselect_all') : t('select_all');
+            // الزر يضيء فقط عندما يكون الكل محدداً؛ اللون مرتبط بالحالة لا باللمس
+            btn.classList.toggle('text-amber-400', allOn);
+            btn.classList.toggle('text-slate-400', !allOn);
             btn.classList.toggle('hidden', rows.length === 0);
             // عدد التطبيقات المحددة: يظهر عند تحديد واحد فأكثر
             const n = Object.keys(whitelist).length;
