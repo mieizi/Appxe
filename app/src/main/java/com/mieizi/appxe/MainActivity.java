@@ -305,6 +305,43 @@ public class MainActivity extends Activity {
         return arr;
     }
 
+    /** كل التطبيقات التي لها أيقونة في قائمة التطبيقات، لعرضها في قائمة الاستثناءات. */
+    private JSONArray listAllApps() {
+        final List<JSONObject> items = new ArrayList<>();
+        PackageManager pm = getPackageManager();
+        Set<String> seen = new HashSet<>();
+        seen.add(getPackageName());
+        Intent li = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> ris;
+        try {
+            ris = pm.queryIntentActivities(li, 0);
+        } catch (Throwable t) {
+            ris = new ArrayList<>();
+        }
+        for (ResolveInfo ri : ris) {
+            try {
+                if (ri.activityInfo == null) continue;
+                String pkg = ri.activityInfo.packageName;
+                if (pkg == null || !seen.add(pkg)) continue;
+                JSONObject o = new JSONObject();
+                o.put("id", pkg);
+                o.put("name", String.valueOf(
+                        pm.getApplicationLabel(ri.activityInfo.applicationInfo)));
+                items.add(o);
+            } catch (Throwable ignored) {
+            }
+        }
+        Collections.sort(items, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject a, JSONObject b) {
+                return a.optString("name").compareToIgnoreCase(b.optString("name"));
+            }
+        });
+        JSONArray arr = new JSONArray();
+        for (JSONObject o : items) arr.put(o);
+        return arr;
+    }
+
     private JSONObject ram() {
         JSONObject o = new JSONObject();
         try {
@@ -386,6 +423,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public String getApps() {
             return listApps().toString();
+        }
+
+        @JavascriptInterface
+        public String getAllApps() {
+            return listAllApps().toString();
         }
 
         /** ارتفاع شريطي النظام بوحدة CSS، تقرؤه الصفحة عند التحميل. */
