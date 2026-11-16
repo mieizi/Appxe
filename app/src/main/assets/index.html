@@ -320,10 +320,13 @@
             color: #CBD5E1;
         }
 
+        /* العنصر النشط: النص والأيقونة يضيئان فقط، بدون كبسولة خلفهما */
         .nav-item.active {
             color: #FDE68A;
-            background: rgba(245, 158, 11, 0.13);
-            border: 1px solid rgba(245, 158, 11, 0.24);
+            text-shadow: 0 0 14px rgba(245, 158, 11, 0.60);
+        }
+        .nav-item.active svg {
+            filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.55));
         }
 
         /* مفتاح التبديل الزجاجي الفاخر (Spring Toggle Switch) */
@@ -552,9 +555,11 @@
         body.light .nav-item { color: #64748B; }
         body.light .nav-item:hover { color: #334155; }
         body.light .nav-item.active {
-            color: #92400E;
-            background: rgba(245, 158, 11, 0.16);
-            border: 1px solid rgba(217, 119, 6, 0.35);
+            color: #B45309;
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.40);
+        }
+        body.light .nav-item.active svg {
+            filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.40));
         }
 
         body.light .spring-switch { background: rgba(30, 41, 59, 0.10); border-color: rgba(30, 41, 59, 0.12); }
