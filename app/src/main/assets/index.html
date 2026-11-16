@@ -1195,10 +1195,11 @@
             renderHomeApps();
         });
 
-        // النقر على أي مكان خارج شريط البحث (غير زر X) يغلق البحث
+        // النقر خارج شريط البحث يغلقه، ما عدا نتائج البحث وأزرار العمل عليها
+        const SEARCH_KEEP_OPEN = '#homeSearchBox, button[aria-label="بحث"], #homeAppsList, #purgeDock, #selectAllAction';
         document.addEventListener('click', (e) => {
             if (!isSearchExpanded) return;
-            if (e.target.closest('#homeSearchBox') || e.target.closest('button[aria-label="بحث"]')) return;
+            if (e.target.closest(SEARCH_KEEP_OPEN)) return;
             toggleHomeSearch();
         }, true);
 
